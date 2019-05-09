@@ -33,10 +33,10 @@ typedef struct {
 } SetGimbalData;
 
 typedef struct {
+    float v_yaw;
     float p_yaw;
-    float p_pitch;
-    float v_yaw; 
     float v_pitch;
+    float p_pitch;
 } GetGimbalData;
 
 

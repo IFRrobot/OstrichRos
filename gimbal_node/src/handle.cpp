@@ -15,8 +15,8 @@ union GIMBAL_RECEIVE_DATA
     uint8_t get_gimbal_data[sizeof(GetGimbalData)];
     GetGimbalData getdata;
 };
-GIMBAL_RECEIVE_DATA gimbal_receive_data; 
-
+//GIMBAL_RECEIVE_DATA gimbal_receive_data; 
+GetGimbalData gimbal_receive_data;
 
 ros::Subscriber gimbal_control_sub ;
 
@@ -76,8 +76,9 @@ void handle_spin()
     CmdMessage *recv_container=new CmdMessage();
     if(Take(recv_container))
     {
-        memcpy(recv_container->data,gimbal_receive_data.get_gimbal_data ,recv_container->head.len);
-       // ROS_INFO("v_p:%f,v_y:%f   p_p:%f,p_y:%f",gimbal_receive_data.getdata.v_pitch,gimbal_receive_data.getdata.v_yaw,gimbal_receive_data.getdata.p_pitch,gimbal_receive_data.getdata.p_yaw );
+        memcpy(&gimbal_receive_data,recv_container->data,recv_container->head.len);
+        ROS_INFO("v_y:%f  p_y:%f v_p:%f p_p:%f,",\
+        gimbal_receive_data.v_yaw,gimbal_receive_data.p_yaw,gimbal_receive_data.v_pitch,gimbal_receive_data.p_pitch );
 
     }
     CmdProcess(); //cmd process
