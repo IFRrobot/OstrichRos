@@ -95,8 +95,8 @@ CmdMessage *Receive(){
             
 
             if (crc==crc_rec){// tail CRC check
-                printf("receice data:\n");
-                for(int i=0;i<sizeof(CRCReceiveData);i++) printf("%x ",CRCReceiveData[i]);
+                //printf("receice data:\n");
+                //for(int i=0;i<sizeof(CRCReceiveData);i++) printf("%x ",CRCReceiveData[i]);
                 printf("\n");
                 
                 memcpy(recv_container->data, cmdReceiveData, recv_container->head.len);
@@ -149,13 +149,13 @@ bool Send(CmdMessage &send_container)
 
     
     uint16_t send_crc=CRC16Calc(cmdSendData,sizeof(CmdHead)+send_container.head.len);
-    ROS_INFO("CRCSEND |%x|,CRCSEND size |%d| ",send_crc,sizeof(CmdHead)+send_container.head.len);
+    //ROS_INFO("CRCSEND |%x|,CRCSEND size |%d| ",send_crc,sizeof(CmdHead)+send_container.head.len);
 
     cmdSendData[sizeof(CmdHead)+send_container.head.len]=(send_crc&0xff);//crc_h
     cmdSendData[sizeof(CmdHead)+send_container.head.len+1]=(send_crc>>8);//crc_l
     
     write_uart(cmdSendData,send_container.head.len + sizeof(CmdHead) + sizeof(send_container.tail.len)+1);    
-    ROS_INFO("Send data success!!");
+   // ROS_INFO("Send data success!!");
     
     return true;
 }

@@ -40,7 +40,7 @@ gimbal_node::gimbal gimbal_control;
   double pitch_position=0;
   double yaw_position=0;
   double p_key_value=20;
-  double v_key_value=2;
+  double v_key_value=60;
   bool stable=true;
   ros::Publisher gimbal_control_pub_;
  double secs;
@@ -202,10 +202,10 @@ void ros_pub()
       if(pitch_position<=-55)pitch_position=-55;
       if(yaw_position>=115) yaw_position=115;
       if(yaw_position<=-115) yaw_position=-115;  
-      if(pitch_speed>=10) pitch_speed=10;
-      if(pitch_speed<=-10)pitch_speed=-10;
-      if(yaw_speed>=10) yaw_speed=10;
-      if(yaw_speed<=-10) yaw_speed=-10; 
+      if(pitch_speed>=100) pitch_speed=100;
+      if(pitch_speed<=-100)pitch_speed=-100;
+      if(yaw_speed>=100) yaw_speed=100;
+      if(yaw_speed<=-100) yaw_speed=-100; 
 
       gimbal_control.mode=(stable_mode*4)+(pitch_mode*2)+yaw_mode;
       gimbal_control.stable_mode=stable_mode;

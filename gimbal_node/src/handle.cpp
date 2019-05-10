@@ -1,4 +1,6 @@
 #include "handle.h"
+#include <iostream>
+#include <fstream>
 using namespace std;
 
 
@@ -66,23 +68,36 @@ CmdMessage *senddata=new CmdMessage();
 
     senddata->head.id=CMD_SEND_ID;
     senddata->head.len=sizeof(SetGimbalData);
-    CmdSend(senddata->head.id,senddata->head.len,gimbal_send_data.set_gimbal_data);
-     
+    CmdSend(senddata->head.id,senddata->head.len,gimbal_send_data.set_gimbal_data);  
 }
 
 
 void handle_spin()
 {
+    static int time =0;
+    static GetGimbalData gimbal_data_temp;
     CmdMessage *recv_container=new CmdMessage();
     if(Take(recv_container))
     {
         memcpy(&gimbal_receive_data,recv_container->data,recv_container->head.len);
         ROS_INFO("v_y:%f  p_y:%f v_p:%f p_p:%f,",\
         gimbal_receive_data.v_yaw,gimbal_receive_data.p_yaw,gimbal_receive_data.v_pitch,gimbal_receive_data.p_pitch );
+        ros::Time current_time = ros::Time::now();
+    ofstream outfile("/home/ubuntu/gimbal_data.txt",ios::app);
+    if (outfile.fail())              // 如果读取失败，打印fail
+    {
+        cout<< "fail" << endl;
+    }
+    else{
+       // cout<<"write successfully!"<<endl;
+        outfile<<setprecision(6)<<setw(6)<<current_time<<" "<<setw(6)<<gimbal_receive_data.p_yaw <<" "<<setw(6)<<gimbal_receive_data.p_pitch <<" "<<setw(6)<<gimbal_send_data.setdata.yaw <<" "<<setw(6)<<gimbal_send_data.setdata.pitch<<endl;
+        outfile.close();
+    }   
 
     }
+    if(!(time++%50)){
     CmdProcess(); //cmd process
-    
+    }
     
 }
 
